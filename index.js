@@ -1,74 +1,106 @@
 const player = (name, sign) => {
-  return { name, sign };
+    return { name, sign };
 };
 
-const gameBoard = function() {
-  const cells = document.querySelectorAll(".cell");
-  const display = displayController(cells);
-  const isWinner = cells => {
-    const winPos = [
-      [0, 1, 2],
-      [3, 4, 5],
-      [6, 7, 8],
-      [0, 3, 6],
-      [1, 4, 7],
-      [2, 5, 8],
-      [0, 4, 8],
-      [2, 4, 6]
+const gameBoard = function () {
+    const cells = document.querySelectorAll(".cell");
+    const display = displayController(cells);
+    let started = false;
+    let players = [];
+    const isWinner = cells => {
+        const winPos = [
+            [0, 1, 2],
+            [3, 4, 5],
+            [6, 7, 8],
+            [0, 3, 6],
+            [1, 4, 7],
+            [2, 5, 8],
+            [0, 4, 8],
+            [2, 4, 6]
+        ];
+        let win = false;
+
+        winPos.forEach(pos => {
+            if (cells[pos[0]] && cells[pos[0]] === cells[pos[1]] && cells[pos[0]] === cells[pos[2]]) {
+                win = true;
+            }
+        });
+        return win;
+    };
+
+    let playerturn = 0;
+
+    let boardValuesxIsFilled = [
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false
     ];
-    let win = false;
 
-    winPos.forEach(pos => {
-      if (cells[pos[0]] && cells[pos[0]] === cells[pos[1]] && cells[pos[0]] === cells[pos[2]]) {
-        win = true;
-      }
-    });
-    return win;
-  };
+    const match = cellindex => {
+        debugger;
+        if (!boardValuesxIsFilled[cellindex] && started) {
+            let player = players[playerturn];
 
-  let playerturn = 0;
-  const players = [player("player one", "O"), player("player two", "X")];
-  let boardValuesxIsFilled = [
-    false,
-    false,
-    false,
-    false,
-    false,
-    false,
-    false,
-    false,
-    false
-  ];
+            cells[cellindex].innerHTML = player.sign;
 
-  const match = cellindex => {
-    if (!boardValuesxIsFilled[cellindex]) {
-      let player = players[playerturn];
+            boardValuesxIsFilled[cellindex] = player.sign;
+            console.log(boardValuesxIsFilled);
+            console.log(isWinner(boardValuesxIsFilled));
+            if (isWinner(boardValuesxIsFilled)) {
+                display.sendmsg(`the is a winner :D. congrats !! ${player.name}`)
+            } else if ([...cells].every(item => item.innerHTML != "_")) {
+                display.sendmsg(`all cells are filled, game finished.`)
+            }
+            playerturn += 1;
+            playerturn %= 2;
+        }
+    };
 
-      cells[cellindex].innerHTML = player.sign;
+    cells.forEach((item, index) =>
+        item.addEventListener("click", () => match(index))
+    );
 
-      boardValuesxIsFilled[cellindex] = player.sign;
-      console.log(boardValuesxIsFilled);
-      console.log(isWinner(boardValuesxIsFilled));
+    const start = () => {
 
-      playerturn += 1;
-      playerturn %= 2;
-    }
-  };
+        debugger;
+        if (!started) {
+            if (document.querySelector("#playerone-name").value != "" && document.querySelector("#playertwo-name").value != "") {
+                players = [player(document.querySelector("#playerone-name").value, "O"), player(document.querySelector("#playertwo-name").value, "X")];
+                started = true;
+                display.sendmsg("there ya go :)")
+            }
+            else {
+                display.sendmsg("name should not be empty.")
+            }
+        } else {
+            started = !started;
+        }
 
-  cells.forEach((item, index) =>
-    item.addEventListener("click", () => match(index))
-  );
-  return { cells, match, display };
+    };
+    const reset = () => {
+        started = false;
+        players = [];
+        boardValuesxIsFilled = [false,false,false,false,false,false,false,false,false,]
+        cells.forEach(item => item.innerHTML = "_")
+    };
+    return { cells, match, display, start, reset };
 };
+
 
 const displayController = cells => {
-  const htmlcontainer = document.querySelector("main");
+    const htmlcontainer = document.querySelector("div.info");
 
-  const display = contextmsg => {
-    const msg = `<label>${contextmsg}</label>`;
-    htmlcontainer += msg;
-  };
-  return { display };
+    const sendmsg = contextmsg => {
+
+        htmlcontainer.innerHTML = contextmsg;
+    };
+    return { sendmsg };
 };
 
 const Game = gameBoard();
