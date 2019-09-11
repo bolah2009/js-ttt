@@ -1,5 +1,13 @@
+---
 linters:
+  flake8:
   stylelint:
     config: "stylelint.config.js"
   eslint:
-    config: "./eslint.config"
+    config: './eslint.config'
+  csslint:
+
+files:
+    ignore:
+        - 'src/generated/*'
+        - 'webroot/bower_components/*'
