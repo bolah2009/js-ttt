@@ -1,8 +1,8 @@
-* {
+/* * {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
-}
+} */
 
 section {
   display: flex;
@@ -11,15 +11,17 @@ section {
 }
 
 form {
+  align-self: center;
   display: flex;
   flex-direction: column;
   max-width: 17rem;
-  align-self: center;
+
 }
 
 input {
-  padding: 0.5rem 0.6rem;
   margin-bottom: 0.5rem;
+  padding: 0.5rem 0.6rem;
+
 }
 
 label {
@@ -36,34 +38,35 @@ input[type="button"] {
 
 .main {
   display: flex;
-  justify-content: center;
   flex-direction: column;
-  text-align: center;
+  justify-content: center;
   justify-items: center;
+  text-align: center;
+  
 }
 
 .board {
-  min-width: 240px;
-  width: 400px;
+  align-self: center;
   display: flex;
   flex-direction: column;
   margin: 16px;
-  align-self: center;
+  min-width: 240px;
+  width: 400px;
 }
 
 .row {
-  min-height: 60px;
-  height: 60px;
   display: flex;
+  height: 60px;
+  min-height: 60px;
   width: 100%;
 }
 
 .cell {
-  text-align: center;
-  width: 33.33%;
+  border: 1px solid black;
+  font-size: 1.375rem;
   height: 100%;
   line-height: 48px;
-  font-size: 1.375rem;
+  text-align: center;
   vertical-align: middle;
-  border: 1px solid black;
+  width: 33.33%;
 }
