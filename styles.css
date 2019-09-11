@@ -8,7 +8,6 @@ section {
   display: flex;
   flex-direction: row;
   justify-content: center;
-  
 }
 
 form {
@@ -16,28 +15,23 @@ form {
   flex-direction: column;
   max-width: 17rem;
   align-self: center;
-  
 }
 
 input {
   padding: .5rem .6rem;
   margin-bottom: .5rem;
-  
 }
 
 label {
   margin-bottom: .5rem;
-  
 }
 
 label:first-of-type {
   margin-top:1rem;
-
 }
 
 input[type="button"] {
   background-color: whitesmoke;
-  
 }
 
 .main {
@@ -46,7 +40,6 @@ input[type="button"] {
   flex-direction: column;
   text-align: center;
   justify-items: center;
-  
 }
 
 .board {
@@ -56,7 +49,6 @@ input[type="button"] {
   flex-direction: column;
   margin: 16px;
   align-self: center;
-  
 }
 
 .row {
@@ -64,7 +56,6 @@ input[type="button"] {
   height: 60px;
   display: flex;
   width: 100%;
-  
 }
 
 .cell {
@@ -75,5 +66,4 @@ input[type="button"] {
   font-size: 1.375rem;
   vertical-align: middle;
   border: 1px solid black;
-  
 }
