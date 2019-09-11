@@ -56,7 +56,6 @@ input[type="button"] {
 }
 
 .cell {
-  border: 1px solid black;
   font-size: 1.375rem;
   height: 100%;
   line-height: 48px;
