@@ -1,53 +1,58 @@
 <!DOCTYPE html>
 <html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <link href="styles.css" rel="stylesheet" />
+    <title>Odin Tic-Tac-Toe</title>
+  </head>
 
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <meta http-equiv="X-UA-Compatible" content="ie=edge" />
-  <link href="styles.css" rel="stylesheet" />
-  <title>Odin Tic-Tac-Toe</title>
-</head>
-
-<body>
-  <main class="main">
-    <section class="form">
-      <form>
-        <label>Player 1</label>
-        <input id="playerone-name" type="text" pattern="/w+" placeholder="Player one name">
-        <label>Player 2</label>
-        <input id="playertwo-name" type="text" pattern="/w+" placeholder="Player two name">
-        <input type="button" value="start" onclick="Game.start()">
-        <input type="button" value="reset" onclick="Game.reset()">
-      </form>
-    </section>
-    <div class="board">
-      <div class="row">
-        <div class="cell" data-id="0">_</div>
-        <div class="cell" data-id="1">_</div>
-        <div class="cell" data-id="2">_</div>
+  <body>
+    <main class="main">
+      <section class="form">
+        <form>
+          <label>Player 1</label>
+          <input
+            id="playerone-name"
+            type="text"
+            pattern="/w+"
+            placeholder="Player one name"
+          />
+          <label>Player 2</label>
+          <input
+            id="playertwo-name"
+            type="text"
+            pattern="/w+"
+            placeholder="Player two name"
+          />
+          <input type="button" value="start" />
+          <input type="button" value="reset" />
+        </form>
+      </section>
+      <div class="board">
+        <div class="row">
+          <div class="cell">_</div>
+          <div class="cell">_</div>
+          <div class="cell">_</div>
+        </div>
+        <div class="row">
+          <div class="cell">_</div>
+          <div class="cell">_</div>
+          <div class="cell">_</div>
+        </div>
+        <div class="row">
+          <div class="cell">_</div>
+          <div class="cell">_</div>
+          <div class="cell">_</div>
+        </div>
       </div>
-      <div class="row">
-        <div class="cell" data-id="3">_</div>
-        <div class="cell" data-id="4">_</div>
-        <div class="cell" data-id="5">_</div>
-      </div>
-      <div class="row">
-        <div class="cell" data-id="6">_</div>
-        <div class="cell" data-id="7">_</div>
-        <div class="cell" data-id="8">_</div>
-      </div>
-    </div>
-    <section class="status">
-      <div class="info">
-        Please type in your names :)
-      </div>
-    </section>
-  </main>
-
-  <script type="text/javascript" src="index.js">
-
-  </script>
-</body>
-
+      <section class="status">
+        <div class="info">
+          Please type in your names :)
+        </div>
+      </section>
+    </main>
+    <script type="text/javascript" src="index.js"></script>
+  </body>
 </html>
