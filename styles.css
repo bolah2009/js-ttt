@@ -40,7 +40,6 @@ input[type="button"] {
   display: flex;
   flex-direction: column;
   justify-content: center;
-  justify-items: center;
   text-align: center;
   
 }
