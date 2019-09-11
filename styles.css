@@ -1,0 +1,31 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+.main {
+  display: flex;
+  justify-content: center;
+}
+
+.board {
+  min-width: 240px;
+  width: 400px;
+  display: flex;
+  flex-direction: column;
+  margin: 16px;
+}
+
+.row {
+  min-height: 60px;
+  height: 60px;
+  display: flex;
+  width: 100%;
+}
+
+.cell {
+  width: 33.33%;
+  height: 100%;
+  border: 1px solid black;
+}
