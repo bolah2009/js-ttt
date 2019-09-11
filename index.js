@@ -51,7 +51,7 @@ const gameBoard = () => {
       boardValuesxIsFilled[cellindex] = currentPlayer.sign;
       if (isWinner(boardValuesxIsFilled)) {
         display.sendmsg(`the is a winner :D. congrats !! ${currentPlayer.name}`);
-      } else if ([...cells].every((item) => item.textContent !== '_')) {
+      } else if ([...cells].every(item => item.textContent !== '_')) {
         display.sendmsg('all cells are filled, game finished.');
       }
       playerturn += 1;
