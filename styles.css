@@ -62,6 +62,5 @@ input[type="button"] {
   line-height: 48px;
   text-align: center;
   vertical-align: middle;
-  box-sizing: content-box;
   width: 33.33%;
 }
