@@ -10,8 +10,8 @@ const displayController = () => {
   return { sendmsg };
 };
 
-const gameBoard = () => {
-  const cells = document.querySelectorAll('.cell');
+const gameBoard = (boardCells) => {
+  const cells = boardCells;
   const display = displayController(cells);
   let started = false;
   let players = [];
@@ -51,8 +51,10 @@ const gameBoard = () => {
       boardValuesxIsFilled[cellindex] = currentPlayer.sign;
       if (isWinner(boardValuesxIsFilled)) {
         display.sendmsg(`the is a winner :D. congrats !! ${currentPlayer.name}`);
-      } else if ([...cells].every(item => item.textContent !== '_')) {
+        started = false;
+      } else if ([...cells].every((item) => (item.textContent !== '_'))) {
         display.sendmsg('all cells are filled, game finished.');
+        started = false;
       }
       playerturn += 1;
       playerturn %= 2;
@@ -93,7 +95,9 @@ const gameBoard = () => {
   };
 };
 
-const Game = gameBoard();
+
+const cells = document.querySelectorAll('.cell');
+const Game = gameBoard(cells);
 
 const handlers = ({ target: { value } }) => {
   switch (value) {
