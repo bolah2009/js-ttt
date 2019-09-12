@@ -11,8 +11,32 @@ const displayController = () => {
     htmlcontainer.textContent = contextmsg;
   };
 
-  const markBoard = (mark, index) => {
-    cellsElement[index].textContent = mark;
+  const markBoard = ({ mark = '', index = '', type = '' } = {}) => {
+    switch (type) {
+      case 'clear':
+        cellsElement.forEach((element) => {
+          element.classList.remove('playerO', 'playerX');
+        });
+        break;
+      case 'win':
+        cellsElement.forEach((element) => {
+          element.classList.remove('playerO', 'playerX');
+          element.classList.add('win');
+        });
+        break;
+      case 'draw':
+        cellsElement.forEach((element) => {
+          element.classList.remove('playerO', 'playerX');
+          element.classList.add('draw');
+        });
+        break;
+      case 'play':
+        cellsElement[index].textContent = mark;
+        cellsElement[index].classList.add(`player${mark}`);
+        break;
+      default:
+        break;
+    }
   };
 
   const isPlayerNameValid = (inputOne, inputTwo) => {
@@ -21,7 +45,9 @@ const displayController = () => {
     const valid = playerOne !== playerTwo && playerTwo !== '';
     return { valid, playerOne, playerTwo };
   };
-  return { sendmsg, markBoard, isPlayerNameValid };
+  return {
+    sendmsg, markBoard, isPlayerNameValid,
+  };
 };
 
 const gameBoard = (boardCells) => {
@@ -56,14 +82,15 @@ const gameBoard = (boardCells) => {
     return win;
   };
 
-  const boardValuesxIsFilled = [];
+  const boardValuesxIsFilled = [0, 0, 0, 0, 0, 0, 0, 0, 0];
 
-  const isDraw = () => boardValuesxIsFilled.length >= 9;
+  const isDraw = () => boardValuesxIsFilled.every(i => i !== 0);
 
   const reset = () => {
     started = false;
     players = [];
-    boardValuesxIsFilled.splice(0);
+    display.markBoard({ type: 'clear' });
+    boardValuesxIsFilled.fill(0);
     cells.forEach((item, index) => {
       cells[index].textContent = '_';
     });
@@ -90,17 +117,18 @@ const gameBoard = (boardCells) => {
   const match = (cellindex) => {
     if (!boardValuesxIsFilled[cellindex] && started) {
       const currentPlayer = players[playerturn];
-      display.markBoard(currentPlayer.sign, cellindex);
+      display.markBoard({ mark: currentPlayer.sign, index: cellindex, type: 'play' });
       boardValuesxIsFilled[cellindex] = currentPlayer.sign;
       if (isWinner(boardValuesxIsFilled)) {
+        display.markBoard({ type: 'win' });
         display.sendmsg(`this is a winner :D. congrats !! ${currentPlayer.name}`);
         started = false;
       } else if (isDraw()) {
+        display.markBoard({ type: 'draw' });
         display.sendmsg('all cells are filled, game finished.');
         started = false;
       }
-      playerturn += 1;
-      playerturn %= 2;
+      playerturn = playerturn === 0 ? 1 : 0;
     }
   };
   return { match, start, reset };
