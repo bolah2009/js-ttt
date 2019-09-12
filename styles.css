@@ -1,0 +1,117 @@
+@import url("https://fonts.googleapis.com/css?family=Hepta+Slab:200,400,700&display=swap");
+
+* {
+  font-family: "Hepta Slab", serif;
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  outline: none;
+}
+
+body {
+  background-position: center;
+  background-size: cover;
+  background-image: url("https://user-images.githubusercontent.com/36057474/64746616-3b1f4000-d504-11e9-9f68-78ec28fcf349.jpg");
+}
+
+section {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+}
+
+form {
+  align-self: center;
+  display: flex;
+  flex-direction: column;
+  max-width: 17rem;
+}
+
+div.input {
+  display: flex;
+  width: 100%;
+}
+
+input {
+  margin-bottom: 0.5rem;
+  padding: 0.5rem 0.6rem;
+  border: 1px solid blue;
+  border-radius: 8px;
+}
+
+input:active,
+input:focus {
+  border: 1px solid yellow;
+}
+
+input:hover {
+  border: 1px solid green;
+  color: green;
+}
+
+.input [type="button"] {
+  background-color: whitesmoke;
+  width: 50%;
+}
+
+.input [data-id="start"] {
+  border-right: none;
+  border-radius: 8px 0 0 8px;
+}
+
+.input [data-id="reset"] {
+  border-radius: 0 8px 8px 0;
+}
+
+.main {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  text-align: center;
+  padding: 4%;
+}
+
+.board {
+  align-self: center;
+  display: flex;
+  flex-direction: column;
+  margin: 16px;
+  width: 300px;
+  height: 300px;
+}
+
+.row {
+  width: 100%;
+  height: 33.33%;
+  display: flex;
+}
+
+.cell {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 95%;
+  width: 33.33%;
+  font-size: 1.375rem;
+  line-height: 48px;
+  text-align: center;
+  border: 1px solid peru;
+  border-radius: 4px;
+  margin: 4px;
+}
+
+.playerO {
+  border: 2px solid blue;
+}
+
+.playerX {
+  border: 2px solid purple;
+}
+
+.win {
+  border: 2px solid green;
+}
+
+.draw {
+  border: 2px solid red;
+}
