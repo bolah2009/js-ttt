@@ -84,7 +84,7 @@ const gameBoard = (boardCells) => {
 
   const boardValuesxIsFilled = [0, 0, 0, 0, 0, 0, 0, 0, 0];
 
-  const isDraw = () => boardValuesxIsFilled.every((i) => i !== 0);
+  const isDraw = () => boardValuesxIsFilled.every(i => i !== 0);
 
   const reset = () => {
     started = false;
