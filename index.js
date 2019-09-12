@@ -1,106 +1,164 @@
-const player = (name, sign) => {
-    return { name, sign };
+const player = (name, sign) => ({ name, sign });
+
+
+const cellsElement = document.querySelectorAll('.cell');
+const htmlcontainer = document.querySelector('div.info');
+const playerOneInput = document.querySelector('#playerone-name');
+const playerTwoInput = document.querySelector('#playertwo-name');
+
+const displayController = () => {
+  const sendmsg = (contextmsg) => {
+    htmlcontainer.textContent = contextmsg;
+  };
+
+  const markBoard = ({ mark = '', index = '', type = '' } = {}) => {
+    switch (type) {
+      case 'clear':
+        cellsElement.forEach((element) => {
+          element.classList.remove('playerO', 'playerX');
+        });
+        break;
+      case 'win':
+        cellsElement.forEach((element) => {
+          element.classList.remove('playerO', 'playerX');
+          element.classList.add('win');
+        });
+        break;
+      case 'draw':
+        cellsElement.forEach((element) => {
+          element.classList.remove('playerO', 'playerX');
+          element.classList.add('draw');
+        });
+        break;
+      case 'play':
+        cellsElement[index].textContent = mark;
+        cellsElement[index].classList.add(`player${mark}`);
+        break;
+      default:
+        break;
+    }
+  };
+
+  const isPlayerNameValid = (inputOne, inputTwo) => {
+    const playerOne = inputOne.value;
+    const playerTwo = inputTwo.value;
+    const valid = playerOne !== playerTwo && playerTwo !== '';
+    return { valid, playerOne, playerTwo };
+  };
+  return {
+    sendmsg, markBoard, isPlayerNameValid,
+  };
 };
 
-const gameBoard = function () {
-    const cells = document.querySelectorAll(".cell");
-    const display = displayController(cells);
-    let started = false;
-    let players = [];
-    const isWinner = cells => {
-        const winPos = [
-            [0, 1, 2],
-            [3, 4, 5],
-            [6, 7, 8],
-            [0, 3, 6],
-            [1, 4, 7],
-            [2, 5, 8],
-            [0, 4, 8],
-            [2, 4, 6]
-        ];
-        let win = false;
-
-        winPos.forEach(pos => {
-            if (cells[pos[0]] && cells[pos[0]] === cells[pos[1]] && cells[pos[0]] === cells[pos[2]]) {
-                win = true;
-            }
-        });
-        return win;
-    };
-
-    let playerturn = 0;
-
-    let boardValuesxIsFilled = [
-        false,
-        false,
-        false,
-        false,
-        false,
-        false,
-        false,
-        false,
-        false
+const gameBoard = (boardCells) => {
+  const cells = boardCells;
+  const display = displayController();
+  let started = false;
+  let players = [];
+  let playerturn = 0;
+  const isWinner = (cellsValue) => {
+    const winPos = [
+      [0, 1, 2],
+      [3, 4, 5],
+      [6, 7, 8],
+      [0, 3, 6],
+      [1, 4, 7],
+      [2, 5, 8],
+      [0, 4, 8],
+      [2, 4, 6],
     ];
 
-    const match = cellindex => {
-        debugger;
-        if (!boardValuesxIsFilled[cellindex] && started) {
-            let player = players[playerturn];
+    let win = false;
 
-            cells[cellindex].innerHTML = player.sign;
+    winPos.forEach((pos) => {
+      if (
+        cellsValue[pos[0]]
+        && cellsValue[pos[0]] === cellsValue[pos[1]]
+        && cellsValue[pos[0]] === cellsValue[pos[2]]
+      ) {
+        win = true;
+      }
+    });
+    return win;
+  };
 
-            boardValuesxIsFilled[cellindex] = player.sign;
-            console.log(boardValuesxIsFilled);
-            console.log(isWinner(boardValuesxIsFilled));
-            if (isWinner(boardValuesxIsFilled)) {
-                display.sendmsg(`the is a winner :D. congrats !! ${player.name}`)
-            } else if ([...cells].every(item => item.innerHTML != "_")) {
-                display.sendmsg(`all cells are filled, game finished.`)
-            }
-            playerturn += 1;
-            playerturn %= 2;
-        }
-    };
+  const boardValuesxIsFilled = [0, 0, 0, 0, 0, 0, 0, 0, 0];
 
-    cells.forEach((item, index) =>
-        item.addEventListener("click", () => match(index))
-    );
+  const isDraw = () => boardValuesxIsFilled.every(i => i !== 0);
 
-    const start = () => {
+  const reset = () => {
+    started = false;
+    players = [];
+    display.markBoard({ type: 'clear' });
+    boardValuesxIsFilled.fill(0);
+    cells.forEach((item, index) => {
+      cells[index].textContent = '_';
+    });
+  };
 
-        debugger;
-        if (!started) {
-            if (document.querySelector("#playerone-name").value != "" && document.querySelector("#playertwo-name").value != "") {
-                players = [player(document.querySelector("#playerone-name").value, "O"), player(document.querySelector("#playertwo-name").value, "X")];
-                started = true;
-                display.sendmsg("there ya go :)")
-            }
-            else {
-                display.sendmsg("name should not be empty.")
-            }
-        } else {
-            started = !started;
-        }
+  const start = () => {
+    reset();
+    if (!started) {
+      const {
+        valid, playerOne, playerTwo,
+      } = display.isPlayerNameValid(playerOneInput, playerTwoInput);
+      if (valid) {
+        players = [player(playerOne, 'O'), player(playerTwo, 'X')];
+        started = true;
+        display.sendmsg('there ya go :)');
+      } else {
+        display.sendmsg('name should not be empty.');
+      }
+    } else {
+      started = !started;
+    }
+  };
 
-    };
-    const reset = () => {
+  const match = (cellindex) => {
+    if (!boardValuesxIsFilled[cellindex] && started) {
+      const currentPlayer = players[playerturn];
+      display.markBoard({ mark: currentPlayer.sign, index: cellindex, type: 'play' });
+      boardValuesxIsFilled[cellindex] = currentPlayer.sign;
+      if (isWinner(boardValuesxIsFilled)) {
+        display.markBoard({ type: 'win' });
+        display.sendmsg(`this is a winner :D. congrats !! ${currentPlayer.name}`);
         started = false;
-        players = [];
-        boardValuesxIsFilled = [false,false,false,false,false,false,false,false,false,]
-        cells.forEach(item => item.innerHTML = "_")
-    };
-    return { cells, match, display, start, reset };
+      } else if (isDraw()) {
+        display.markBoard({ type: 'draw' });
+        display.sendmsg('all cells are filled, game finished.');
+        started = false;
+      }
+      playerturn = playerturn === 0 ? 1 : 0;
+    }
+  };
+  return { match, start, reset };
 };
 
 
-const displayController = cells => {
-    const htmlcontainer = document.querySelector("div.info");
+const Game = gameBoard(cellsElement);
 
-    const sendmsg = contextmsg => {
-
-        htmlcontainer.innerHTML = contextmsg;
-    };
-    return { sendmsg };
+const handlers = ({ target: { dataset: { id } } }) => {
+  switch (id) {
+    case 'start':
+      Game.start();
+      break;
+    case 'reset':
+      Game.reset();
+      break;
+    case '0':
+    case '1':
+    case '2':
+    case '3':
+    case '4':
+    case '5':
+    case '6':
+    case '7':
+    case '8':
+      Game.match(id);
+      break;
+    default:
+      break;
+  }
 };
 
-const Game = gameBoard();
+document.addEventListener('click', handlers);
