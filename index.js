@@ -72,9 +72,9 @@ const gameBoard = (boardCells) => {
   const start = () => {
     reset();
     if (!started) {
-      const { valid, playerOne, playerTwo } = display.isPlayerNameValid(
-        playerOneInput, playerTwoInput,
-      );
+      const {
+        valid, playerOne, playerTwo,
+      } = display.isPlayerNameValid(playerOneInput, playerTwoInput);
       if (valid) {
         players = [player(playerOne, 'O'), player(playerTwo, 'X')];
         started = true;
