@@ -13,6 +13,17 @@ const displayController = () => {
 
   const markBoard = (mark, index) => {
     cellsElement[index].textContent = mark;
+    if (mark === 'X') {
+      cellsElement[index].classList.add('playerX');
+    } else {
+      cellsElement[index].classList.add('playerO');
+    }
+  };
+
+  const clearMark = () => {
+    cellsElement.forEach((element) => {
+      element.classList.remove('playerO', 'playerX');
+    });
   };
 
   const isPlayerNameValid = (inputOne, inputTwo) => {
@@ -21,7 +32,9 @@ const displayController = () => {
     const valid = playerOne !== playerTwo && playerTwo !== '';
     return { valid, playerOne, playerTwo };
   };
-  return { sendmsg, markBoard, isPlayerNameValid };
+  return {
+    sendmsg, markBoard, clearMark, isPlayerNameValid,
+  };
 };
 
 const gameBoard = (boardCells) => {
@@ -56,14 +69,15 @@ const gameBoard = (boardCells) => {
     return win;
   };
 
-  const boardValuesxIsFilled = [];
+  const boardValuesxIsFilled = [0, 0, 0, 0, 0, 0, 0, 0, 0];
 
-  const isDraw = () => boardValuesxIsFilled.length >= 9;
+  const isDraw = () => boardValuesxIsFilled.every((i) => i !== 0);
 
   const reset = () => {
     started = false;
     players = [];
-    boardValuesxIsFilled.splice(0);
+    display.clearMark();
+    boardValuesxIsFilled.fill(0);
     cells.forEach((item, index) => {
       cells[index].textContent = '_';
     });
@@ -92,6 +106,7 @@ const gameBoard = (boardCells) => {
       const currentPlayer = players[playerturn];
       display.markBoard(currentPlayer.sign, cellindex);
       boardValuesxIsFilled[cellindex] = currentPlayer.sign;
+      console.log(boardValuesxIsFilled);
       if (isWinner(boardValuesxIsFilled)) {
         display.sendmsg(`this is a winner :D. congrats !! ${currentPlayer.name}`);
         started = false;
@@ -99,8 +114,7 @@ const gameBoard = (boardCells) => {
         display.sendmsg('all cells are filled, game finished.');
         started = false;
       }
-      playerturn += 1;
-      playerturn %= 2;
+      playerturn = playerturn === 0 ? 1 : 0;
     }
   };
   return { match, start, reset };
