@@ -71,7 +71,7 @@ const gameBoard = (boardCells) => {
 
   const boardValuesxIsFilled = [0, 0, 0, 0, 0, 0, 0, 0, 0];
 
-  const isDraw = () => boardValuesxIsFilled.every((i) => i !== 0);
+  const isDraw = () => boardValuesxIsFilled.every(i => i !== 0);
 
   const reset = () => {
     started = false;
@@ -106,7 +106,6 @@ const gameBoard = (boardCells) => {
       const currentPlayer = players[playerturn];
       display.markBoard(currentPlayer.sign, cellindex);
       boardValuesxIsFilled[cellindex] = currentPlayer.sign;
-      console.log(boardValuesxIsFilled);
       if (isWinner(boardValuesxIsFilled)) {
         display.sendmsg(`this is a winner :D. congrats !! ${currentPlayer.name}`);
         started = false;
