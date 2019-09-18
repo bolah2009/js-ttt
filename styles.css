@@ -9,7 +9,7 @@
 }
 
 body {
-  background-color: #ffffff;
+  background-color: #fff;
   background-image: url("image/background.svg");
   background-attachment: fixed;
   background-size: cover;
@@ -99,7 +99,8 @@ input:hover {
   border: 1px solid peru;
   border-radius: 4px;
   margin: 4px;
-  background-color: rgba(150,150,150,0.5);
+  background-color: rgba(150, 150, 150);
+  background-color: rgba(150, 150, 150, 0.5);
 }
 
 .playerO {
