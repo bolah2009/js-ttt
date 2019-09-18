@@ -13,7 +13,6 @@ const inputElements = document.querySelectorAll('input');
 const computerPlayer = () => {
   const getRandomIndex = (max) => Math.floor(Math.random() * Math.floor(max));
   const choosePosition = (validMoves) => validMoves[getRandomIndex(validMoves.length)];
-  // const isComputerTurn = (moves) => choosePosition(moves);
   return { choosePosition };
 };
 
@@ -70,15 +69,7 @@ const displayController = () => {
   };
 };
 
-const gameBoard = (boardCells) => {
-  const cells = boardCells;
-  const {
-    sendmsg, markBoard, isPlayerNameValid, disableInputs,
-  } = displayController();
-  const { choosePosition } = computerPlayer();
-  let started = false;
-  let players = [];
-  let playerturn = 0;
+const gameLogic = () => {
   const isWinner = (cellsValue) => {
     const winPos = [
       [0, 1, 2],
@@ -92,6 +83,7 @@ const gameBoard = (boardCells) => {
     ];
 
     let win = false;
+    let winner = 0;
 
     winPos.forEach((pos) => {
       if (
@@ -100,23 +92,87 @@ const gameBoard = (boardCells) => {
         && cellsValue[pos[0]] === cellsValue[pos[2]]
       ) {
         win = true;
+        winner = cellsValue[pos[0]] === 'X' ? 10 : -10;
       }
     });
-    return win;
+    return { win, winner };
   };
+
+  const validMoves = (board) => board.filter((i) => i !== 'X' && i !== 'O');
+  const isValid = (index, board) => validMoves(board).includes(Number.parseInt(index, 10));
+  const isDraw = (board) => validMoves(board).length < 1;
+
+  const evaluateBoard = (board) => isWinner(board).winner;
+
+  const minmax = (board, depth, isMax) => {
+    const score = evaluateBoard(board);
+    let best;
+    if (score === 10 || score === -10) {
+      return score;
+    }
+    if (isDraw(board)) {
+      return 0;
+    }
+    if (isMax) {
+      best = -1000;
+      validMoves(board).forEach((i) => {
+        const tempBoard = board.slice();
+        tempBoard[i] = 'X';
+        best = Math.max(best, minmax(tempBoard, depth + 1, !isMax));
+      });
+      return best;
+    }
+    best = 1000;
+    validMoves(board).forEach((i) => {
+      const tempBoard = board.slice();
+      tempBoard[i] = 'O';
+      best = Math.min(best, minmax(tempBoard, depth + 1, !isMax));
+    });
+    return best;
+  };
+
+  const findBestMove = (board) => {
+    let bestValue = -1000;
+    let bestMove;
+    validMoves(board).forEach((i) => {
+      const tempBoard = board.slice();
+      tempBoard[i] = 'X';
+      const moveVal = minmax(tempBoard, 0, false);
+      if (bestValue < moveVal) {
+        bestValue = moveVal;
+        bestMove = i;
+      }
+    });
+    return bestMove;
+  };
+
+  return {
+    isValid, validMoves, isWinner, isDraw, findBestMove,
+  };
+};
+
+const gameBoard = (boardCells) => {
+  const {
+    isValid, validMoves, isWinner, isDraw, findBestMove,
+  } = gameLogic();
+  const cells = boardCells;
+  const {
+    sendmsg, markBoard, isPlayerNameValid, disableInputs,
+  } = displayController();
+  // const { choosePosition } = computerPlayer();
+  let started = false;
+  let players = [];
+  let playerturn = 0;
 
 
   const boardValuesxIsFilled = [];
 
-  const validMoves = () => boardValuesxIsFilled.filter((i) => i !== 'X' && i !== 'O');
-  const isValid = (index) => validMoves().includes(Number.parseInt(index, 10));
-  const isDraw = () => validMoves().length < 1;
-
   const clear = () => {
     started = false;
     players = [];
+    playerturn = 0;
     markBoard({ type: 'clear' });
-    cells.forEach((item, index) => {
+    cells.forEach((_item, index) => {
       cells[index].textContent = '_';
       boardValuesxIsFilled.splice(index, 1, index);
     });
@@ -145,17 +201,19 @@ const gameBoard = (boardCells) => {
   };
 
   const match = (cellindex) => {
-    if (isValid(cellindex) && started) {
+    if (!started) { return; }
+    if (isValid(cellindex, boardValuesxIsFilled) && started) {
       const currentPlayer = players[playerturn];
       markBoard({ mark: currentPlayer.sign, index: cellindex, type: 'play' });
       boardValuesxIsFilled[cellindex] = currentPlayer.sign;
-      validMoves().splice(cellindex, 1);
-      if (isWinner(boardValuesxIsFilled)) {
+      validMoves(boardValuesxIsFilled).splice(cellindex, 1);
+      console.log(isWinner(boardValuesxIsFilled).winner);
+      if (isWinner(boardValuesxIsFilled).win) {
         markBoard({ type: 'win' });
         sendmsg(`this is a winner :D. congrats !! ${currentPlayer.name}`);
         started = false;
         return;
-      } if (isDraw()) {
+      } if (isDraw(boardValuesxIsFilled)) {
         markBoard({ type: 'draw' });
         sendmsg('all cells are filled, game finished.');
         started = false;
@@ -164,7 +222,8 @@ const gameBoard = (boardCells) => {
       playerturn = playerturn === 0 ? 1 : 0;
     }
     if (players[playerturn].name === 'Computer') {
-      match(choosePosition(validMoves()));
+      setTimeout(() => match(findBestMove(boardValuesxIsFilled)), 300);
+      // setTimeout(() => match(choosePosition(validMoves(boardValuesxIsFilled))), 300);
     }
   };
   return { match, start, reset };
