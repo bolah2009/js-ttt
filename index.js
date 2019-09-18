@@ -5,6 +5,17 @@ const cellsElement = document.querySelectorAll('.cell');
 const htmlcontainer = document.querySelector('div.info');
 const playerOneInput = document.querySelector('#playerone-name');
 const playerTwoInput = document.querySelector('#playertwo-name');
+const playerComputerYes = document.querySelector('#yes');
+const playerComputerNo = document.querySelector('#no');
+const computerCheckbox = document.querySelector('input[type="checkbox"]');
+const inputElements = document.querySelectorAll('input');
+
+const computerPlayer = () => {
+  const getRandomIndex = (max) => Math.floor(Math.random() * Math.floor(max));
+  const choosePosition = (validMoves) => validMoves[getRandomIndex(validMoves.length)];
+  // const isComputerTurn = (moves) => choosePosition(moves);
+  return { choosePosition };
+};
 
 const displayController = () => {
   const sendmsg = (contextmsg) => {
@@ -39,20 +50,32 @@ const displayController = () => {
     }
   };
 
+  const disableInputs = (disable = true) => {
+    if (disable) {
+      inputElements.forEach((e) => e.setAttribute('disabled', ''));
+    } else {
+      inputElements.forEach((e) => e.removeAttribute('disabled', ''));
+    }
+  };
+
   const isPlayerNameValid = (inputOne, inputTwo) => {
     const playerOne = inputOne.value;
-    const playerTwo = inputTwo.value;
-    const valid = playerOne !== playerTwo && playerTwo !== '';
+    const isComputer = computerCheckbox.checked;
+    const playerTwo = isComputer ? 'Computer' : inputTwo.value;
+    const valid = () => playerOne !== playerTwo && playerTwo !== '';
     return { valid, playerOne, playerTwo };
   };
   return {
-    sendmsg, markBoard, isPlayerNameValid,
+    sendmsg, markBoard, isPlayerNameValid, disableInputs,
   };
 };
 
 const gameBoard = (boardCells) => {
   const cells = boardCells;
-  const display = displayController();
+  const {
+    sendmsg, markBoard, isPlayerNameValid, disableInputs,
+  } = displayController();
+  const { choosePosition } = computerPlayer();
   let started = false;
   let players = [];
   let playerturn = 0;
@@ -82,53 +105,66 @@ const gameBoard = (boardCells) => {
     return win;
   };
 
-  const boardValuesxIsFilled = [0, 0, 0, 0, 0, 0, 0, 0, 0];
 
-  const isDraw = () => boardValuesxIsFilled.every(i => i !== 0);
+  const boardValuesxIsFilled = [];
 
-  const reset = () => {
+  const validMoves = () => boardValuesxIsFilled.filter((i) => i !== 'X' && i !== 'O');
+  const isValid = (index) => validMoves().includes(Number.parseInt(index, 10));
+  const isDraw = () => validMoves().length < 1;
+
+  const clear = () => {
     started = false;
     players = [];
-    display.markBoard({ type: 'clear' });
-    boardValuesxIsFilled.fill(0);
+    markBoard({ type: 'clear' });
     cells.forEach((item, index) => {
       cells[index].textContent = '_';
+      boardValuesxIsFilled.splice(index, 1, index);
     });
   };
 
+
+  const reset = () => {
+    clear();
+    disableInputs(false);
+  };
+
   const start = () => {
-    reset();
-    if (!started) {
-      const {
-        valid, playerOne, playerTwo,
-      } = display.isPlayerNameValid(playerOneInput, playerTwoInput);
-      if (valid) {
-        players = [player(playerOne, 'O'), player(playerTwo, 'X')];
-        started = true;
-        display.sendmsg('there ya go :)');
-      } else {
-        display.sendmsg('name should not be empty.');
-      }
+    clear();
+    const {
+      valid, playerOne, playerTwo,
+    } = isPlayerNameValid(playerOneInput, playerTwoInput);
+    if (valid()) {
+      disableInputs();
+      players = [player(playerOne, 'O'), player(playerTwo, 'X')];
+
+      started = true;
+      sendmsg('there ya go :)');
     } else {
-      started = !started;
+      sendmsg('name should not be empty.');
     }
   };
 
   const match = (cellindex) => {
-    if (!boardValuesxIsFilled[cellindex] && started) {
+    if (isValid(cellindex) && started) {
       const currentPlayer = players[playerturn];
-      display.markBoard({ mark: currentPlayer.sign, index: cellindex, type: 'play' });
+      markBoard({ mark: currentPlayer.sign, index: cellindex, type: 'play' });
       boardValuesxIsFilled[cellindex] = currentPlayer.sign;
+      validMoves().splice(cellindex, 1);
       if (isWinner(boardValuesxIsFilled)) {
-        display.markBoard({ type: 'win' });
-        display.sendmsg(`this is a winner :D. congrats !! ${currentPlayer.name}`);
+        markBoard({ type: 'win' });
+        sendmsg(`this is a winner :D. congrats !! ${currentPlayer.name}`);
         started = false;
-      } else if (isDraw()) {
-        display.markBoard({ type: 'draw' });
-        display.sendmsg('all cells are filled, game finished.');
+        return;
+      } if (isDraw()) {
+        markBoard({ type: 'draw' });
+        sendmsg('all cells are filled, game finished.');
         started = false;
+        return;
       }
       playerturn = playerturn === 0 ? 1 : 0;
+    }
+    if (players[playerturn].name === 'Computer') {
+      match(choosePosition(validMoves()));
     }
   };
   return { match, start, reset };
@@ -162,3 +198,15 @@ const handlers = ({ target: { dataset: { id } } }) => {
 };
 
 document.addEventListener('click', handlers);
+
+
+document.querySelector('input[type="checkbox"]')
+  .addEventListener('click', ({ target: { checked } }) => {
+    [playerComputerYes, playerTwoInput].forEach((e) => e.classList.toggle('checked', checked));
+    playerComputerNo.classList.toggle('checked', !checked);
+    if (checked) {
+      setTimeout(() => playerTwoInput.classList.add('hide'), 200);
+    } else {
+      playerTwoInput.classList.remove('hide');
+    }
+  });
