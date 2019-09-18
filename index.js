@@ -15,7 +15,7 @@ const displayController = () => {
     switch (type) {
       case 'clear':
         cellsElement.forEach((element) => {
-          element.classList.remove('playerO', 'playerX');
+          element.classList.remove('playerO', 'playerX', 'win', 'draw');
         });
         break;
       case 'win':
