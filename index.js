@@ -48,9 +48,9 @@ const displayController = () => {
 
   const disableInputs = (disable = true) => {
     if (disable) {
-      inputElements.forEach((e) => e.setAttribute('disabled', ''));
+      inputElements.forEach(e => e.setAttribute('disabled', ''));
     } else {
-      inputElements.forEach((e) => e.removeAttribute('disabled', ''));
+      inputElements.forEach(e => e.removeAttribute('disabled', ''));
     }
     controlPanelElement.classList.toggle('hide', disable);
   };
@@ -104,9 +104,9 @@ const gameLogic = () => {
     return { win, winner };
   };
 
-  const validMoves = (board) => board.filter((i) => i !== 'X' && i !== 'O');
+  const validMoves = (board) => board.filter(i => i !== 'X' && i !== 'O');
   const isValid = (index, board) => validMoves(board).includes(Number.parseInt(index, 10));
-  const isDraw = (board) => validMoves(board).length < 1;
+  const isDraw = board => validMoves(board).length < 1;
 
   return {
     isValid,
@@ -119,7 +119,7 @@ const gameLogic = () => {
 const computerPlayer = () => {
   const { validMoves, isWinner, isDraw } = gameLogic();
 
-  const evaluateBoard = (board) => isWinner(board).winner;
+  const evaluateBoard = board => isWinner(board).winner;
 
   const minmax = (board, depth, isMax) => {
     const score = evaluateBoard(board);
@@ -163,10 +163,10 @@ const computerPlayer = () => {
     return bestMove;
   };
 
-  const getRandomIndex = (max) => Math.floor(Math.random() * Math.floor(max));
+  const getRandomIndex = max => Math.floor(Math.random() * Math.floor(max));
 
   const choosePosition = (_validMoves) => _validMoves[getRandomIndex(validMoves.length)];
-  const findEasyMove = (board) => choosePosition(validMoves(board));
+  const findEasyMove = board => choosePosition(validMoves(board));
 
   const computerPlay = (board) => {
     const { isLevelHard: hard } = displayController();
@@ -295,7 +295,7 @@ document.addEventListener('click', handlers);
 document
   .querySelector('input[type="checkbox"]')
   .addEventListener('click', ({ target: { checked } }) => {
-    [playerComputerYes, playerTwoInput].forEach((e) => e.classList.toggle('checked', checked));
+    [playerComputerYes, playerTwoInput].forEach(e => e.classList.toggle('checked', checked));
     playerComputerNo.classList.toggle('checked', !checked);
     if (checked) {
       setTimeout(() => playerTwoInput.classList.add('hide'), 200);
