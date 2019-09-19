@@ -11,7 +11,7 @@ The objective is to create a tic-tac-toe game with the following features.
 
 #### [Assignment link](https://www.theodinproject.com/courses/javascript/lessons/tic-tac-toe-javascript)
 
-#### [Live link](https://raw.githack.com/bolah2009/js-ttt/feature/js_modules/index.html)
+#### [Live link](https://bolabuari.com/js-ttt/)
 
 #### ScreenShot
 
