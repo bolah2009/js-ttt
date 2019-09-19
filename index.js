@@ -1,25 +1,22 @@
 const player = (name, sign) => ({ name, sign });
 
-
 const cellsElement = document.querySelectorAll('.cell');
 const htmlcontainer = document.querySelector('div.info');
 const playerOneInput = document.querySelector('#playerone-name');
 const playerTwoInput = document.querySelector('#playertwo-name');
 const playerComputerYes = document.querySelector('#yes');
 const playerComputerNo = document.querySelector('#no');
-const computerCheckbox = document.querySelector('input[type="checkbox"]');
+const computerCheckbox = document.querySelector('.computer-player');
+const difficultLevelCheckbox = document.querySelector('.difficulty-level');
+const controlPanelElement = document.querySelector('.control-panel');
 const inputElements = document.querySelectorAll('input');
-
-const computerPlayer = () => {
-  const getRandomIndex = (max) => Math.floor(Math.random() * Math.floor(max));
-  const choosePosition = (validMoves) => validMoves[getRandomIndex(validMoves.length)];
-  return { choosePosition };
-};
 
 const displayController = () => {
   const sendmsg = (contextmsg) => {
     htmlcontainer.textContent = contextmsg;
   };
+
+  const isLevelHard = difficultLevelCheckbox.checked;
 
   const markBoard = ({ mark = '', index = '', type = '' } = {}) => {
     switch (type) {
@@ -55,17 +52,26 @@ const displayController = () => {
     } else {
       inputElements.forEach((e) => e.removeAttribute('disabled', ''));
     }
+    controlPanelElement.classList.toggle('hide', disable);
   };
 
   const isPlayerNameValid = (inputOne, inputTwo) => {
     const playerOne = inputOne.value;
     const isComputer = computerCheckbox.checked;
     const playerTwo = isComputer ? 'Computer' : inputTwo.value;
-    const valid = () => playerOne !== playerTwo && playerTwo !== '';
-    return { valid, playerOne, playerTwo };
+    const valid = () => playerOne !== playerTwo && playerOne !== '' && playerTwo !== '';
+    return {
+      valid,
+      playerOne,
+      playerTwo,
+    };
   };
   return {
-    sendmsg, markBoard, isPlayerNameValid, disableInputs,
+    sendmsg,
+    markBoard,
+    isPlayerNameValid,
+    disableInputs,
+    isLevelHard,
   };
 };
 
@@ -101,6 +107,17 @@ const gameLogic = () => {
   const validMoves = (board) => board.filter((i) => i !== 'X' && i !== 'O');
   const isValid = (index, board) => validMoves(board).includes(Number.parseInt(index, 10));
   const isDraw = (board) => validMoves(board).length < 1;
+
+  return {
+    isValid,
+    validMoves,
+    isWinner,
+    isDraw,
+  };
+};
+
+const computerPlayer = () => {
+  const { validMoves, isWinner, isDraw } = gameLogic();
 
   const evaluateBoard = (board) => isWinner(board).winner;
 
@@ -146,24 +163,37 @@ const gameLogic = () => {
     return bestMove;
   };
 
-  return {
-    isValid, validMoves, isWinner, isDraw, findBestMove,
+  const getRandomIndex = (max) => Math.floor(Math.random() * Math.floor(max));
+
+  const choosePosition = (_validMoves) => _validMoves[getRandomIndex(validMoves.length)];
+  const findEasyMove = (board) => choosePosition(validMoves(board));
+
+  const computerPlay = (board) => {
+    const { isLevelHard: hard } = displayController();
+    if (hard) {
+      return findBestMove(board);
+    }
+    return findEasyMove(board);
   };
+  return { computerPlay };
 };
 
 const gameBoard = (boardCells) => {
   const {
-    isValid, validMoves, isWinner, isDraw, findBestMove,
+    isValid, validMoves, isWinner, isDraw,
   } = gameLogic();
+  const { computerPlay } = computerPlayer();
   const cells = boardCells;
   const {
-    sendmsg, markBoard, isPlayerNameValid, disableInputs,
+    sendmsg,
+    markBoard,
+    isPlayerNameValid,
+    disableInputs,
   } = displayController();
-  // const { choosePosition } = computerPlayer();
+
   let started = false;
   let players = [];
   let playerturn = 0;
-
 
   const boardValuesxIsFilled = [];
 
@@ -178,7 +208,6 @@ const gameBoard = (boardCells) => {
     });
   };
 
-
   const reset = () => {
     clear();
     disableInputs(false);
@@ -186,53 +215,59 @@ const gameBoard = (boardCells) => {
 
   const start = () => {
     clear();
-    const {
-      valid, playerOne, playerTwo,
-    } = isPlayerNameValid(playerOneInput, playerTwoInput);
+    const { valid, playerOne, playerTwo } = isPlayerNameValid(
+      playerOneInput,
+      playerTwoInput,
+    );
     if (valid()) {
       disableInputs();
       players = [player(playerOne, 'O'), player(playerTwo, 'X')];
-
       started = true;
-      sendmsg('there ya go :)');
+      sendmsg(`Let's go ... ${players[0].name} :)`);
     } else {
-      sendmsg('name should not be empty.');
+      sendmsg('Please, enter a valid name...');
     }
   };
 
   const match = (cellindex) => {
-    if (!started) { return; }
-    if (isValid(cellindex, boardValuesxIsFilled) && started) {
+    if (!started) {
+      sendmsg('Game not started, press START button...');
+      return;
+    }
+    if (isValid(cellindex, boardValuesxIsFilled)) {
       const currentPlayer = players[playerturn];
       markBoard({ mark: currentPlayer.sign, index: cellindex, type: 'play' });
       boardValuesxIsFilled[cellindex] = currentPlayer.sign;
       validMoves(boardValuesxIsFilled).splice(cellindex, 1);
-      console.log(isWinner(boardValuesxIsFilled).winner);
       if (isWinner(boardValuesxIsFilled).win) {
         markBoard({ type: 'win' });
-        sendmsg(`this is a winner :D. congrats !! ${currentPlayer.name}`);
+        sendmsg(`${currentPlayer.name} wins the game... `);
         started = false;
         return;
-      } if (isDraw(boardValuesxIsFilled)) {
+      }
+      if (isDraw(boardValuesxIsFilled)) {
         markBoard({ type: 'draw' });
-        sendmsg('all cells are filled, game finished.');
+        sendmsg("It's a draw... seems like a tough one...");
         started = false;
         return;
       }
       playerturn = playerturn === 0 ? 1 : 0;
     }
+    sendmsg(`It's your turn ${players[playerturn].name}... (Player: ${players[playerturn].sign})`);
     if (players[playerturn].name === 'Computer') {
-      setTimeout(() => match(findBestMove(boardValuesxIsFilled)), 300);
-      // setTimeout(() => match(choosePosition(validMoves(boardValuesxIsFilled))), 300);
+      setTimeout(() => match(computerPlay(boardValuesxIsFilled)), 300);
     }
   };
   return { match, start, reset };
 };
 
-
 const Game = gameBoard(cellsElement);
 
-const handlers = ({ target: { dataset: { id } } }) => {
+const handlers = ({
+  target: {
+    dataset: { id },
+  },
+}) => {
   switch (id) {
     case 'start':
       Game.start();
@@ -258,8 +293,8 @@ const handlers = ({ target: { dataset: { id } } }) => {
 
 document.addEventListener('click', handlers);
 
-
-document.querySelector('input[type="checkbox"]')
+document
+  .querySelector('input[type="checkbox"]')
   .addEventListener('click', ({ target: { checked } }) => {
     [playerComputerYes, playerTwoInput].forEach((e) => e.classList.toggle('checked', checked));
     playerComputerNo.classList.toggle('checked', !checked);
