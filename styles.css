@@ -71,6 +71,11 @@ div.input-wrapper {
   border-radius: 0 8px 8px 0;
 }
 
+.info.input {
+  background-color: rgba(250, 200, 250);
+  background-color: rgba(250, 200, 250, 0.8);
+}
+
 .main {
   display: flex;
   flex-direction: column;

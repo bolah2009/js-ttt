@@ -105,7 +105,7 @@ const gameLogic = () => {
     return { win, winner };
   };
 
-  const validMoves = (board) => board.filter(i => i !== 'X' && i !== 'O');
+  const validMoves = board => board.filter(i => i !== 'X' && i !== 'O');
   const isValid = (index, board) => validMoves(board).includes(Number.parseInt(index, 10));
   const isDraw = board => validMoves(board).length < 1;
 
@@ -166,7 +166,7 @@ const computerPlayer = () => {
 
   const getRandomIndex = max => Math.floor(Math.random() * Math.floor(max));
 
-  const choosePosition = (_validMoves) => _validMoves[getRandomIndex(validMoves.length)];
+  const choosePosition = _validMoves => _validMoves[getRandomIndex(validMoves.length)];
   const findEasyMove = board => choosePosition(validMoves(board));
 
   const computerPlay = (board) => {
