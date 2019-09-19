@@ -9,9 +9,10 @@
 }
 
 body {
-  background-position: center;
+  background-color: #fff;
+  background-image: url("image/background.svg");
+  background-attachment: fixed;
   background-size: cover;
-  background-image: url("https://user-images.githubusercontent.com/36057474/64746616-3b1f4000-d504-11e9-9f68-78ec28fcf349.jpg");
 }
 
 section {
@@ -27,40 +28,52 @@ form {
   max-width: 17rem;
 }
 
-div.input {
+.control-panel {
+  align-self: center;
+  display: flex;
+  flex-direction: column;
+  max-width: 100%;
+}
+
+div.input-wrapper {
   display: flex;
   width: 100%;
 }
 
-input {
+.input {
   margin-bottom: 0.5rem;
   padding: 0.5rem 0.6rem;
   border: 1px solid blue;
   border-radius: 8px;
 }
 
-input:active,
-input:focus {
-  border: 1px solid yellow;
+.input:active,
+.input:focus {
+  border: 1px solid rebeccapurple;
 }
 
-input:hover {
+.input:hover {
   border: 1px solid green;
   color: green;
 }
 
-.input [type="button"] {
+.input-wrapper [type="button"] {
   background-color: whitesmoke;
   width: 50%;
 }
 
-.input [data-id="start"] {
+.input-wrapper [data-id="start"] {
   border-right: none;
   border-radius: 8px 0 0 8px;
 }
 
-.input [data-id="reset"] {
+.input-wrapper [data-id="reset"] {
   border-radius: 0 8px 8px 0;
+}
+
+.info.input {
+  background-color: rgba(250, 200, 250);
+  background-color: rgba(250, 200, 250, 0.8);
 }
 
 .main {
@@ -68,7 +81,7 @@ input:hover {
   flex-direction: column;
   justify-content: center;
   text-align: center;
-  padding: 4%;
+  padding: 16px 4%;
 }
 
 .board {
@@ -98,6 +111,8 @@ input:hover {
   border: 1px solid peru;
   border-radius: 4px;
   margin: 4px;
+  background-color: rgba(150, 150, 150);
+  background-color: rgba(150, 150, 150, 0.5);
 }
 
 .playerO {
@@ -114,4 +129,110 @@ input:hover {
 
 .draw {
   border: 2px solid red;
+}
+
+.input.computer {
+  background-color: rgba(255, 255, 255);
+  background-color: rgba(255, 255, 255, 0.8);
+}
+
+.choice {
+  margin: 2px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.choice span {
+  margin: 2px;
+}
+
+.switch {
+  position: relative;
+  display: inline-block;
+  width: 64px;
+  height: 38px;
+}
+
+.switch input {
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+.slider {
+  position: absolute;
+  cursor: pointer;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: #ccc;
+  -webkit-transition: 0.3s;
+  transition: 0.3s;
+}
+
+.slider::before {
+  position: absolute;
+  content: "";
+  height: 26px;
+  width: 26px;
+  left: 4px;
+  bottom: 4px;
+  background-color: white;
+  -webkit-transition: 0.3s;
+  transition: 0.3s;
+}
+
+input:checked + .slider {
+  background-color: #2196f3;
+}
+
+input:focus + .slider {
+  box-shadow: 0 0 1px #2196f3;
+}
+
+.checked#yes,
+.checked#no {
+  font-weight: 700;
+  color: greenyellow;
+}
+
+#no,
+#yes {
+  color: red;
+}
+
+.checked#playertwo-name {
+  -webkit-transition: 0.3s;
+  transition: 0.3s;
+  -webkit-transform: scale(0);
+  -ms-transform: scale(0);
+  transform: scale(0);
+}
+
+.show#playertwo-name {
+  -webkit-transition: 0.3s;
+  transition: 0.3s;
+  -webkit-transform: scale(1);
+  -ms-transform: scale(1);
+  transform: scale(1);
+}
+
+.hide#playertwo-name {
+  display: none;
+}
+
+div.hide.control-panel {
+  display: none;
+}
+
+label.hide.level {
+  display: none;
+}
+
+input:checked + .slider::before {
+  -webkit-transform: translateX(26px);
+  -ms-transform: translateX(26px);
+  transform: translateX(26px);
 }
