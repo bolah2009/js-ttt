@@ -215,10 +215,9 @@ const gameBoard = (boardCells) => {
 
   const start = () => {
     clear();
-    const { valid, playerOne, playerTwo } = isPlayerNameValid(
-      playerOneInput,
-      playerTwoInput,
-    );
+    const {
+      valid, playerOne, playerTwo,
+    } = isPlayerNameValid(playerOneInput, playerTwoInput);
     if (valid()) {
       disableInputs();
       players = [player(playerOne, 'O'), player(playerTwo, 'X')];
