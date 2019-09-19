@@ -222,6 +222,10 @@ div.hide.control-panel {
   display: none;
 }
 
+label.hide.level {
+  display: none;
+}
+
 input:checked + .slider::before {
   -webkit-transform: translateX(26px);
   -ms-transform: translateX(26px);

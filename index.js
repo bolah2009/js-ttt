@@ -8,6 +8,7 @@ const playerComputerYes = document.querySelector('#yes');
 const playerComputerNo = document.querySelector('#no');
 const computerCheckbox = document.querySelector('.computer-player');
 const difficultLevelCheckbox = document.querySelector('.difficulty-level');
+const difficultLevelContainer = document.querySelector('label.level');
 const controlPanelElement = document.querySelector('.control-panel');
 const inputElements = document.querySelectorAll('input');
 
@@ -299,7 +300,9 @@ document
     playerComputerNo.classList.toggle('checked', !checked);
     if (checked) {
       setTimeout(() => playerTwoInput.classList.add('hide'), 200);
+      difficultLevelContainer.classList.remove('hide');
     } else {
       playerTwoInput.classList.remove('hide');
+      difficultLevelContainer.classList.add('hide');
     }
   });
