@@ -1,0 +1,27 @@
+{
+  "name": "js-ttt",
+  "version": "1.0.0",
+  "description": "This is the second project of the Main JavaScript curriculum at [Microverse](https://www.microverse.org/) - @microverseinc",
+  "main": "index.js",
+  "dependencies": {
+    "eslint-config-airbnb": "^18.0.1"
+  },
+  "devDependencies": {
+    "eslint": "^6.3.0",
+    "eslint-config-airbnb-base": "^14.0.0",
+    "eslint-plugin-import": "^2.18.2"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/bolah2009/js-ttt.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/bolah2009/js-ttt/issues"
+  },
+  "homepage": "https://github.com/bolah2009/js-ttt#readme"
+}
