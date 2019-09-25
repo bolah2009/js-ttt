@@ -24,8 +24,6 @@ The objective is to create a tic-tac-toe game with the following features.
 | Easy Level (Win) |  Easy Level (Draw) |
 | ![wins easy mode](https://user-images.githubusercontent.com/36057474/65203583-4d105e00-da83-11e9-9d45-d66d097dd623.gif) |  ![draw easy mode](https://user-images.githubusercontent.com/36057474/65203766-f192a000-da83-11e9-9e42-89b21520b335.gif) |
 
-
-
 #### Authors
 
 - [@SotoArmando](https://github.com/SotoArmando)
