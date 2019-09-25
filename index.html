@@ -4,30 +4,67 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+
+    <meta property="og:site_name" content="https://bolabuari.com" />
+    <meta
+      property="og:title"
+      content="Tic-Tac-Toe app"
+    />
+    <meta
+      property="og:description"
+      content="An Tic-Tac-Toe game using minmax algorithm for computer AI"
+    />
+    <meta property="og:image" content="" />
+    <meta property="og:url" content="https://bolabuari.com/js-ttt/" />
+    <meta property="og:type" content="blog" />
+
     <link href="styles.css" rel="stylesheet" />
-    <title>Odin Tic-Tac-Toe</title>
+    <title>Tic-Tac-Toe</title>
   </head>
 
   <body>
     <main class="main">
       <section class="form">
         <form>
+          <div class="control-panel">
           <input
+            class="input"
             id="playerone-name"
             type="text"
             pattern="/w+"
             placeholder="Enter Player One Name"
           />
+          <label class="input computer">
+            <div>Play with computer?</div>
+            <div class="choice">
+              <span id="no">No</span>
+              <span class="switch">
+                <input class="computer-player" checked type="checkbox" /><span class="slider"></span>
+              </span>
+              <span class="checked" id="yes">Yes</span>
+            </div>
+          </label>
+          <label class="input computer level">
+            <div class="choice">
+              <span id="easy">Easy</span>
+              <span class="switch">
+                <input  class="difficulty-level" checked type="checkbox" /><span class="slider"></span>
+              </span>
+              <span class="checked" id="hard">Hard</span>
+            </div>
+          </label>
           <input
+            class="checked input hide"
             id="playertwo-name"
             type="text"
             pattern="/w+"
             placeholder="Enter Player Two Name"
           />
-          <div class="input">
-          <input type="button" value="start" data-id="start" />
-          <input type="button" value="reset" data-id="reset" />
         </div>
+          <div class="input-wrapper">
+            <button class="input" type="button" value="start" data-id="start">start</button>
+            <button class="input" type="button" value="reset" data-id="reset">reset</button>
+          </div>
         </form>
       </section>
       <div class="board">
@@ -48,7 +85,7 @@
         </div>
       </div>
       <section class="status">
-        <div class="info">
+        <div class="info input">
           Please type in your names :)
         </div>
       </section>

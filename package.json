@@ -3,13 +3,14 @@
   "version": "1.0.0",
   "description": "This is the second project of the Main JavaScript curriculum at [Microverse](https://www.microverse.org/) - @microverseinc",
   "main": "index.js",
-  "dependencies": {
-    "eslint-config-airbnb": "^18.0.1"
-  },
+  "dependencies": {},
   "devDependencies": {
     "eslint": "^6.3.0",
     "eslint-config-airbnb-base": "^14.0.0",
-    "eslint-plugin-import": "^2.18.2"
+    "eslint-config-airbnb": "^18.0.1",
+    "eslint-plugin-import": "^2.18.2",
+    "stylelint": "^11.0.0",
+    "stylelint-config-recommended": "^3.0.0"
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
