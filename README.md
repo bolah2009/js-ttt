@@ -1,3 +1,5 @@
+[![Netlify Status](https://api.netlify.com/api/v1/badges/9fdafdba-83d6-4b05-a6ab-105944c2aadc/deploy-status)](https://app.netlify.com/sites/js-ttt/deploys)
+
 # PROJECT: TIC TAC TOE
 
 This is the second project of the Main JavaScript curriculum at [Microverse](https://www.microverse.org/) - @microverseinc
@@ -11,7 +13,7 @@ The objective is to create a tic-tac-toe game with the following features.
 
 #### [Assignment link](https://www.theodinproject.com/courses/javascript/lessons/tic-tac-toe-javascript)
 
-#### [Live link](https://bolabuari.com/js-ttt/)
+#### [Live link](https://js-ttt.netlify.com/)
 
 #### ScreenShot
 
