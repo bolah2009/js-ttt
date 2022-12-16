@@ -11,6 +11,7 @@ const difficultLevelCheckbox = document.querySelector('.difficulty-level');
 const difficultLevelContainer = document.querySelector('label.level');
 const controlPanelElement = document.querySelector('.control-panel');
 const inputElements = document.querySelectorAll('input');
+const boardElement = document.querySelector('.board');
 
 const displayController = () => {
   const sendmsg = (contextmsg) => {
@@ -23,18 +24,18 @@ const displayController = () => {
     switch (type) {
       case 'clear':
         cellsElement.forEach((element) => {
-          element.classList.remove('playerO', 'playerX', 'win', 'draw');
+          element.classList.remove('playero', 'playerx', 'win', 'draw');
         });
         break;
       case 'win':
         cellsElement.forEach((element) => {
-          element.classList.remove('playerO', 'playerX');
+          element.classList.remove('playero', 'playerx');
           element.classList.add('win');
         });
         break;
       case 'draw':
         cellsElement.forEach((element) => {
-          element.classList.remove('playerO', 'playerX');
+          element.classList.remove('playero', 'playerx');
           element.classList.add('draw');
         });
         break;
@@ -49,9 +50,9 @@ const displayController = () => {
 
   const disableInputs = (disable = true) => {
     if (disable) {
-      inputElements.forEach(e => e.setAttribute('disabled', ''));
+      inputElements.forEach((e) => e.setAttribute('disabled', ''));
     } else {
-      inputElements.forEach(e => e.removeAttribute('disabled', ''));
+      inputElements.forEach((e) => e.removeAttribute('disabled', ''));
     }
     controlPanelElement.classList.toggle('hide', disable);
   };
@@ -67,12 +68,18 @@ const displayController = () => {
       playerTwo,
     };
   };
+
+  const showBoard = () => boardElement.classList.remove('hide');
+  const hideBoard = () => boardElement.classList.add('hide');
+
   return {
     sendmsg,
     markBoard,
     isPlayerNameValid,
     disableInputs,
     isLevelHard,
+    showBoard,
+    hideBoard,
   };
 };
 
@@ -94,9 +101,9 @@ const gameLogic = () => {
 
     winPos.forEach((pos) => {
       if (
-        cellsValue[pos[0]]
-        && cellsValue[pos[0]] === cellsValue[pos[1]]
-        && cellsValue[pos[0]] === cellsValue[pos[2]]
+        cellsValue[pos[0]] &&
+        cellsValue[pos[0]] === cellsValue[pos[1]] &&
+        cellsValue[pos[0]] === cellsValue[pos[2]]
       ) {
         win = true;
         winner = cellsValue[pos[0]] === 'X' ? 10 : -10;
@@ -105,9 +112,9 @@ const gameLogic = () => {
     return { win, winner };
   };
 
-  const validMoves = board => board.filter(i => i !== 'X' && i !== 'O');
+  const validMoves = (board) => board.filter((i) => i !== 'X' && i !== 'O');
   const isValid = (index, board) => validMoves(board).includes(Number.parseInt(index, 10));
-  const isDraw = board => validMoves(board).length < 1;
+  const isDraw = (board) => validMoves(board).length < 1;
 
   return {
     isValid,
@@ -120,7 +127,7 @@ const gameLogic = () => {
 const computerPlayer = () => {
   const { validMoves, isWinner, isDraw } = gameLogic();
 
-  const evaluateBoard = board => isWinner(board).winner;
+  const evaluateBoard = (board) => isWinner(board).winner;
 
   const minmax = (board, depth, isMax) => {
     const score = evaluateBoard(board);
@@ -164,10 +171,11 @@ const computerPlayer = () => {
     return bestMove;
   };
 
-  const getRandomIndex = max => Math.floor(Math.random() * Math.floor(max));
-
-  const choosePosition = _validMoves => _validMoves[getRandomIndex(validMoves.length)];
-  const findEasyMove = board => choosePosition(validMoves(board));
+  const choosePosition = (_validMoves) => {
+    const randomIndex = Math.floor(Math.random() * _validMoves.length);
+    return _validMoves[randomIndex];
+  };
+  const findEasyMove = (board) => choosePosition(validMoves(board));
 
   const computerPlay = (board) => {
     const { isLevelHard: hard } = displayController();
@@ -180,17 +188,11 @@ const computerPlayer = () => {
 };
 
 const gameBoard = (boardCells) => {
-  const {
-    isValid, validMoves, isWinner, isDraw,
-  } = gameLogic();
+  const { isValid, validMoves, isWinner, isDraw } = gameLogic();
   const { computerPlay } = computerPlayer();
   const cells = boardCells;
-  const {
-    sendmsg,
-    markBoard,
-    isPlayerNameValid,
-    disableInputs,
-  } = displayController();
+  const { sendmsg, markBoard, isPlayerNameValid, disableInputs, showBoard, hideBoard } =
+    displayController();
 
   let started = false;
   let players = [];
@@ -204,27 +206,28 @@ const gameBoard = (boardCells) => {
     playerturn = 0;
     markBoard({ type: 'clear' });
     cells.forEach((_item, index) => {
-      cells[index].textContent = '_';
+      cells[index].textContent = '';
       boardValuesxIsFilled.splice(index, 1, index);
     });
   };
 
   const reset = () => {
     clear();
+    hideBoard();
     disableInputs(false);
   };
 
   const start = () => {
     clear();
-    const {
-      valid, playerOne, playerTwo,
-    } = isPlayerNameValid(playerOneInput, playerTwoInput);
+    const { valid, playerOne, playerTwo } = isPlayerNameValid(playerOneInput, playerTwoInput);
     if (valid()) {
       disableInputs();
+      showBoard();
       players = [player(playerOne, 'O'), player(playerTwo, 'X')];
       started = true;
       sendmsg(`Let's go ... ${players[0].name} :)`);
     } else {
+      hideBoard();
       sendmsg('Please, enter a valid name...');
     }
   };
@@ -296,7 +299,7 @@ document.addEventListener('click', handlers);
 document
   .querySelector('input[type="checkbox"]')
   .addEventListener('click', ({ target: { checked } }) => {
-    [playerComputerYes, playerTwoInput].forEach(e => e.classList.toggle('checked', checked));
+    [playerComputerYes, playerTwoInput].forEach((e) => e.classList.toggle('checked', checked));
     playerComputerNo.classList.toggle('checked', !checked);
     if (checked) {
       setTimeout(() => playerTwoInput.classList.add('hide'), 200);

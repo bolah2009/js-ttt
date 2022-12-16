@@ -6,10 +6,7 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge" />
 
     <meta property="og:site_name" content="https://bolabuari.com" />
-    <meta
-      property="og:title"
-      content="Tic-Tac-Toe app"
-    />
+    <meta property="og:title" content="Tic-Tac-Toe app" />
     <meta
       property="og:description"
       content="An Tic-Tac-Toe game using minmax algorithm for computer AI"
@@ -24,71 +21,75 @@
 
   <body>
     <main class="main">
-      <section class="form">
-        <form>
-          <div class="control-panel">
-          <input
-            class="input"
-            id="playerone-name"
-            type="text"
-            pattern="/w+"
-            placeholder="Enter Player One Name"
-          />
-          <label class="input computer">
-            <div>Play with computer?</div>
-            <div class="choice">
-              <span id="no">No</span>
-              <span class="switch">
-                <input class="computer-player" checked type="checkbox" /><span class="slider"></span>
-              </span>
-              <span class="checked" id="yes">Yes</span>
+      <div class="container">
+        <section class="form">
+          <form>
+            <div class="control-panel">
+              <input
+                class="input playerone-name"
+                id="playerone-name"
+                type="text"
+                pattern="/w+"
+                placeholder="Enter Player One Name"
+              />
+              <label class="input computer">
+                <div>Play with computer?</div>
+                <div class="choice">
+                  <span id="no">No</span>
+                  <span class="switch">
+                    <input class="computer-player" checked type="checkbox" /><span
+                      class="slider"
+                    ></span>
+                  </span>
+                  <span class="checked" id="yes">Yes</span>
+                </div>
+              </label>
+              <label class="input computer level">
+                <div class="choice">
+                  <span id="easy">Easy</span>
+                  <span class="switch">
+                    <input class="difficulty-level" checked type="checkbox" /><span
+                      class="slider"
+                    ></span>
+                  </span>
+                  <span class="checked" id="hard">Hard</span>
+                </div>
+              </label>
+              <input
+                class="checked input hide playertwo-name"
+                id="playertwo-name"
+                type="text"
+                pattern="/w+"
+                placeholder="Enter Player Two Name"
+              />
             </div>
-          </label>
-          <label class="input computer level">
-            <div class="choice">
-              <span id="easy">Easy</span>
-              <span class="switch">
-                <input  class="difficulty-level" checked type="checkbox" /><span class="slider"></span>
-              </span>
-              <span class="checked" id="hard">Hard</span>
+            <div class="input-wrapper">
+              <button class="input" type="button" value="start" data-id="start">start</button>
+              <button class="input" type="button" value="reset" data-id="reset">reset</button>
             </div>
-          </label>
-          <input
-            class="checked input hide"
-            id="playertwo-name"
-            type="text"
-            pattern="/w+"
-            placeholder="Enter Player Two Name"
-          />
-        </div>
-          <div class="input-wrapper">
-            <button class="input" type="button" value="start" data-id="start">start</button>
-            <button class="input" type="button" value="reset" data-id="reset">reset</button>
+          </form>
+        </section>
+        <div class="board hide">
+          <div class="row">
+            <div class="cell" data-id="0"></div>
+            <div class="cell" data-id="1"></div>
+            <div class="cell" data-id="2"></div>
           </div>
-        </form>
-      </section>
-      <div class="board">
-        <div class="row">
-          <div class="cell" data-id="0">_</div>
-          <div class="cell" data-id="1">_</div>
-          <div class="cell" data-id="2">_</div>
+          <div class="row">
+            <div class="cell" data-id="3"></div>
+            <div class="cell" data-id="4"></div>
+            <div class="cell" data-id="5"></div>
+          </div>
+          <div class="row">
+            <div class="cell" data-id="6"></div>
+            <div class="cell" data-id="7"></div>
+            <div class="cell" data-id="8"></div>
+          </div>
         </div>
-        <div class="row">
-          <div class="cell" data-id="3">_</div>
-          <div class="cell" data-id="4">_</div>
-          <div class="cell" data-id="5">_</div>
-        </div>
-        <div class="row">
-          <div class="cell" data-id="6">_</div>
-          <div class="cell" data-id="7">_</div>
-          <div class="cell" data-id="8">_</div>
-        </div>
+        <section class="status">
+          <div class="info input">Please type in your names :)</div>
+        </section>
       </div>
-      <section class="status">
-        <div class="info input">
-          Please type in your names :)
-        </div>
-      </section>
     </main>
     <script type="text/javascript" src="index.js"></script>
   </body>

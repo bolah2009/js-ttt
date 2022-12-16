@@ -1,7 +1,7 @@
-@import url("https://fonts.googleapis.com/css?family=Hepta+Slab:200,400,700&display=swap");
+@import url('https://fonts.googleapis.com/css?family=Hepta+Slab:200,400,700&display=swap');
 
 * {
-  font-family: "Hepta Slab", serif;
+  font-family: 'Hepta Slab', serif;
   box-sizing: border-box;
   margin: 0;
   padding: 0;
@@ -9,10 +9,28 @@
 }
 
 body {
+  width: 100vw;
+  height: 100vh;
   background-color: #fff;
-  background-image: url("image/background.svg");
+  background-image: url('image/background.svg');
   background-attachment: fixed;
   background-size: cover;
+}
+
+.main {
+  height: 100%;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+}
+
+.container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  text-align: center;
+  padding: 16px 4%;
+  margin: auto;
 }
 
 section {
@@ -57,31 +75,23 @@ div.input-wrapper {
   color: green;
 }
 
-.input-wrapper [type="button"] {
+.input-wrapper [type='button'] {
   background-color: whitesmoke;
   width: 50%;
 }
 
-.input-wrapper [data-id="start"] {
+.input-wrapper [data-id='start'] {
   border-right: none;
   border-radius: 8px 0 0 8px;
 }
 
-.input-wrapper [data-id="reset"] {
+.input-wrapper [data-id='reset'] {
   border-radius: 0 8px 8px 0;
 }
 
 .info.input {
-  background-color: rgba(250, 200, 250);
-  background-color: rgba(250, 200, 250, 0.8);
-}
-
-.main {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  text-align: center;
-  padding: 16px 4%;
+  background-color: rgb(250 200 250);
+  background-color: rgb(250 200 250 / 80%);
 }
 
 .board {
@@ -111,15 +121,15 @@ div.input-wrapper {
   border: 1px solid peru;
   border-radius: 4px;
   margin: 4px;
-  background-color: rgba(150, 150, 150);
-  background-color: rgba(150, 150, 150, 0.5);
+  background-color: rgb(150 150 150);
+  background-color: rgb(150 150 150 / 50%);
 }
 
-.playerO {
+.playero {
   border: 2px solid blue;
 }
 
-.playerX {
+.playerx {
   border: 2px solid purple;
 }
 
@@ -132,8 +142,8 @@ div.input-wrapper {
 }
 
 .input.computer {
-  background-color: rgba(255, 255, 255);
-  background-color: rgba(255, 255, 255, 0.8);
+  background-color: rgb(255 255 255);
+  background-color: rgb(255 255 255 / 80%);
 }
 
 .choice {
@@ -168,19 +178,17 @@ div.input-wrapper {
   right: 0;
   bottom: 0;
   background-color: #ccc;
-  -webkit-transition: 0.3s;
   transition: 0.3s;
 }
 
 .slider::before {
   position: absolute;
-  content: "";
+  content: '';
   height: 26px;
   width: 26px;
   left: 4px;
   bottom: 4px;
   background-color: white;
-  -webkit-transition: 0.3s;
   transition: 0.3s;
 }
 
@@ -203,36 +211,20 @@ input:focus + .slider {
   color: red;
 }
 
-.checked#playertwo-name {
-  -webkit-transition: 0.3s;
+.checked.playertwo-name {
   transition: 0.3s;
-  -webkit-transform: scale(0);
-  -ms-transform: scale(0);
   transform: scale(0);
 }
 
-.show#playertwo-name {
-  -webkit-transition: 0.3s;
+.show.playertwo-name {
   transition: 0.3s;
-  -webkit-transform: scale(1);
-  -ms-transform: scale(1);
   transform: scale(1);
 }
 
-.hide#playertwo-name {
-  display: none;
-}
-
-div.hide.control-panel {
-  display: none;
-}
-
-label.hide.level {
-  display: none;
-}
-
 input:checked + .slider::before {
-  -webkit-transform: translateX(26px);
-  -ms-transform: translateX(26px);
   transform: translateX(26px);
+}
+
+.hide {
+  display: none;
 }
