@@ -2,25 +2,62 @@
 # See: https://circleci.com/docs/2.0/configuration-reference
 version: 2.1
 
+commands:
+  print_pipeline_id:
+    description: 'Prints the pipeline ID'
+    parameters:
+      pipeline_id:
+        type: string
+        default: $CIRCLE_WORKFLOW_ID
+    steps:
+      - run:
+          name: 'Prints current workflow ID'
+          command: echo << parameters.pipeline_id >>
+
 # Define a job to be invoked later in a workflow.
 # See: https://circleci.com/docs/2.0/configuration-reference/#jobs
 jobs:
-  say-hello:
+  install-packages:
     # Specify the execution environment. You can specify an image from Dockerhub or use one of our Convenience Images from CircleCI's Developer Hub.
     # See: https://circleci.com/docs/2.0/configuration-reference/#docker-machine-macos-windows-executor
     docker:
-      - image: cimg/base:stable
+      - image: cimg/node:18.12.1
     # Add steps to the job
     # See: https://circleci.com/docs/2.0/configuration-reference/#steps
     steps:
       - checkout
       - run:
-          name: "Say hello"
-          command: "echo Hello, World!"
+          name: 'Install packages'
+          command: |
+            yarn install
+            echo "$NAME, the package is successfully installed." > ~/output.txt
+      - persist_to_workspace:
+          root: ~/
+          paths:
+            - output.txt
+      - run:
+          name: Handle failed step
+          command: echo 'Build failed miserably !!!'
+          when: on_fail
+
+  print-output:
+    docker:
+      - image: cimg/node:18.12.1
+    steps:
+      - attach_workspace:
+          at: ~/
+      - run:
+          name: 'Print output'
+          command: |
+            cat ~/output.txt
+      - print_pipeline_id
 
 # Invoke jobs via workflows
 # See: https://circleci.com/docs/2.0/configuration-reference/#workflows
 workflows:
-  say-hello-workflow:
+  pr-workflow:
     jobs:
-      - say-hello
+      - install-packages
+      - print-output:
+          requires:
+            - install-packages
